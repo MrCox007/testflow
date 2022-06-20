@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ main, test]
+    tags: ['v*.*.*']
 jobs:
   test:
     runs-on: ubuntu-latest
