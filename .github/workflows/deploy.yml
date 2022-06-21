@@ -10,7 +10,7 @@ jobs:
     #if: github.event.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
     steps:
-      - run: echo Deploy to development
+      - run: echo Deploy to development $(echo $GITHUB_SHA | head -c7)
 
   deploy-testing:
     name: Deploy to testing
@@ -20,7 +20,7 @@ jobs:
     #if: github.event.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
     steps:
-      - run: echo Deploy to testing
+      - run: echo Deploy to testing $(echo $GITHUB_SHA | head -c7)
 
   deploy-staging:
     name: Deploy to staging
@@ -30,7 +30,7 @@ jobs:
     #if: github.event.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - run: echo Deploy to staging
+      - run: echo Deploy to staging $(echo $GITHUB_SHA | head -c7)
 
   deploy-production:
     name: Deploy to production
@@ -39,4 +39,4 @@ jobs:
     needs: [ deploy-staging ]
     runs-on: ubuntu-latest
     steps:
-      - run: echo Deploy to production
+      - run: echo Deploy to production $(echo $GITHUB_SHA | head -c7)
