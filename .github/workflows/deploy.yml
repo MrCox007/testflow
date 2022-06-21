@@ -1,16 +1,42 @@
 name: CI
 on:
   push:
-    branches: [ main, test]
+    branches: [ main ]
 jobs:
-  test:
+  deploy-development:
+    name: Deploy to development
+    environment:
+      name: Development
+    #if: github.event.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Test
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ env.RELEASE_VERSION }}
-          echo ${{github.ref_name}}
+      - run: echo Deploy to development
+
+  deploy-testing:
+    name: Deploy to testing
+    needs: [ deploy-development ]
+    environment:
+      name: Testing
+    #if: github.event.ref == 'refs/heads/test'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Deploy to testing
+
+  deploy-staging:
+    name: Deploy to staging
+    needs: [ deploy-testing ]
+    environment:
+      name: Staging
+    #if: github.event.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Deploy to staging
+
+  deploy-production:
+    name: Deploy to production
+    environment:
+      name: Production
+    needs: [ deploy-staging ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Deploy to production
