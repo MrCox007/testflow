@@ -10,8 +10,14 @@ jobs:
     #if: github.event.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
       - run: echo Deploy to development $(echo $GITHUB_SHA | head -c7)
-
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=version::$(cat VERSION)
+      - name: Test output
+        run: echo ${{ steps.vars.outputs.version }}
   deploy-testing:
     name: Deploy to testing
     needs: [ deploy-development ]
@@ -20,8 +26,14 @@ jobs:
     #if: github.event.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
       - run: echo Deploy to testing $(echo $GITHUB_SHA | head -c7)
-
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=version::$(cat VERSION)
+      - name: Test output
+        run: echo ${{ steps.vars.outputs.version }}
   deploy-staging:
     name: Deploy to staging
     needs: [ deploy-testing ]
